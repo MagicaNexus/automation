@@ -3,14 +3,19 @@ import imaplib
 import email
 import os
 
-# Constants for Gmail access
-EMAIL = os.environ.get('GMAIL_EMAIL')
-PASSWORD = os.environ.get('GMAIL_APP_PASSWORD')
-IMAP_SERVER = 'imap.gmail.com'
-
 class GmailAPI:
     """Class to interact with the Gmail API"""
     def __init__(self):
+
+        # Constants for Gmail access
+        EMAIL = os.environ.get('GMAIL_EMAIL')
+        PASSWORD = os.environ.get('GMAIL_APP_PASSWORD')
+        IMAP_SERVER = 'imap.gmail.com'
+
+        if not EMAIL or not PASSWORD:
+            raise ValueError("GMAIL_EMAIL and/or GMAIL_APP_PASSWORD environment variables are not set")
+        
+        self.mail = imaplib.IMAP4_SSL(IMAP_SERVER)
         self.mail = imaplib.IMAP4_SSL('imap.gmail.com')
         self.mail.login(EMAIL, PASSWORD)
 
